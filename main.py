@@ -25,6 +25,7 @@ class holo:
         chrome_options = options()
         chrome_options.add_argument("--log-level=1")
         chrome_options.add_argument("--incognito")
+        chrome_options.add_argument("--disable-gpu")
         if "--show" in sys.argv:
             pass
         else:
@@ -58,50 +59,54 @@ class holo:
 
     def main(self):
         # try:
-            os.system(self.clear)
-            self.interface.change_title("TikTok Booster")
+        os.system(self.clear)
+        self.interface.change_title("TikTok Booster")
 
-            print(self.color + banner)
-            print(
-                "\n"
-                + self.interface._print(
-                    "Waiting for Zefoy to load... 502 Error = Blocked country or VPN is on"
-                )
+        print(self.color + banner)
+        print(
+            "\n"
+            + self.interface._print(
+                "Waiting for Zefoy to load... 502 Error = Blocked country or VPN is on"
             )
+        )
 
-            self.driver.get("https://zefoy.com")
+        self.driver.get("https://zefoy.com")
+        try:
             WebDriverWait(self.driver, 10).until(EC.alert_is_present())
             alert = self.driver.switch_to.alert
             alert.accept()  # or alert.dismiss()
-            self.wait_for_xpath(self.captcha_box)
-            print(self.interface._print("Site loaded, enter the CAPTCHA to continue."))
+        except Exception:
+            print("Alert did not appear within the specified time.")
 
-            self.solve_captcha()
+        # self.wait_for_xpath(self.captcha_box)
+        print(self.interface._print("Site loaded, enter the CAPTCHA to continue."))
 
-            self.wait_for_xpath(self.xpaths["followers"])
-            os.system(self.clear)
-            status = self.check_status()
+        # self.solve_captcha()
 
-            print(self.color + banner)
-            print()
-            print(self.interface._print(f"Select your option below." + "\n"))
+        self.wait_for_xpath(self.xpaths["views"])
+        os.system(self.clear)
+        status = self.check_status()
 
-            counter = 1
-            for thing in status:
-                print(self.interface._print(f"{thing} {status[thing]}", counter))
-                counter += 1
+        print(self.color + banner)
+        print()
+        print(self.interface._print(f"Select your option below." + "\n"))
 
-            print(f" {Fore.WHITE}[{self.color}7{Fore.WHITE}] Set Limit")
+        counter = 1
+        for thing in status:
+            print(self.interface._print(f"{thing} {status[thing]}", counter))
+            counter += 1
 
-            option = int(input("\n" + self.interface._print(f"")))
+        print(f" {Fore.WHITE}[{self.color}7{Fore.WHITE}] Set Limit")
 
-            self.user_choice(option)
+        option = int(input("\n" + self.interface._print(f"")))
 
-        # except Exception as e:
-        #     print(f'ERROR: {e}')
-        #     self.driver.quit()
-        #     time.sleep(3)
-        #     os._exit(1)
+        self.user_choice(option)
+
+    # except Exception as e:
+    #     print(f'ERROR: {e}')
+    #     self.driver.quit()
+    #     time.sleep(3)
+    #     os._exit(1)
 
     def send_bot(self, search_button, main_xpath, vid_info, div):
         try:
@@ -412,21 +417,21 @@ class holo:
 
 if __name__ == "__main__":
     # try:
-        obj = holo()
-        if "--url" in sys.argv:
-            url_index = sys.argv.index("--url")
-            obj.input = sys.argv[url_index + 1]
+    obj = holo()
+    if "--url" in sys.argv:
+        url_index = sys.argv.index("--url")
+        obj.input = sys.argv[url_index + 1]
 
-        if "--comment" in sys.argv:
-            comment_index = sys.argv.index("--comment")
-            obj.input_comment = sys.argv[comment_index + 1]
+    if "--comment" in sys.argv:
+        comment_index = sys.argv.index("--comment")
+        obj.input_comment = sys.argv[comment_index + 1]
 
-        if "--limit" in sys.argv:
-            limit_index = sys.argv.index("--limit")
-            obj.limit = sys.argv[limit_index + 1]
+    if "--limit" in sys.argv:
+        limit_index = sys.argv.index("--limit")
+        obj.limit = sys.argv[limit_index + 1]
 
-        obj.main()
-    # except Exception as e:
-    #     print("\n" + str(e))
-    #     input("\nPress Enter to exit...")
-    #     os._exit(1)
+    obj.main()
+# except Exception as e:
+#     print("\n" + str(e))
+#     input("\nPress Enter to exit...")
+#     os._exit(1)
