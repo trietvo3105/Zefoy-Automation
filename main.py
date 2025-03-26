@@ -2,10 +2,14 @@
 import platform, os, time, requests
 from colorama import Fore
 import selenium
-from selenium.webdriver.chrome.options import Options as options
+import selenium.webdriver
+
+# from selenium.webdriver.chrome.options import Options as options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from interface.interface import interface
 import sys
 
@@ -22,16 +26,24 @@ Modified by:
 class holo:
     def __init__(self):
         self.show_process = False
-        chrome_options = options()
-        chrome_options.add_argument("--log-level=1")
-        chrome_options.add_argument("--incognito")
-        chrome_options.add_argument("--disable-gpu")
-        if "--show" in sys.argv:
-            pass
-        else:
-            chrome_options.add_argument("--headless")
+        # chrome_options = options()
+        # chrome_options.add_argument("--log-level=1")
+        # chrome_options.add_argument("--incognito")
+        # chrome_options.add_argument("--disable-gpu")
+        # if "--show" in sys.argv:
+        #     pass
+        # else:
+        #     chrome_options.add_argument("--headless")
 
-        self.driver = selenium.webdriver.Chrome(options=chrome_options)
+        # self.driver = selenium.webdriver.Chrome(options=chrome_options)
+        options = selenium.webdriver.ChromeOptions()
+        options.add_argument(
+            r"--user-data-dir=C:\Users\minht\AppData\Local\Google\Chrome\User Data"
+        )
+        options.add_argument(r"--profile-directory=Default")
+        self.driver = selenium.webdriver.Chrome(
+            service=Service(ChromeDriverManager().install()), options=options
+        )
 
         self.interface = interface()
         self.captcha_box = "/html/body/div[5]/div[2]/form/div/div"
@@ -81,6 +93,7 @@ class holo:
         # self.wait_for_xpath(self.captcha_box)
         print(self.interface._print("Site loaded, enter the CAPTCHA to continue."))
 
+        # time.sleep(60)
         # self.solve_captcha()
 
         self.wait_for_xpath(self.xpaths["views"])
