@@ -38,9 +38,10 @@ class holo:
         # self.driver = selenium.webdriver.Chrome(options=chrome_options)
         options = selenium.webdriver.ChromeOptions()
         options.add_argument(
-            r"--user-data-dir=C:\Users\minht\AppData\Local\Google\Chrome\User Data"
+            "--user-data-dir=/home/minh-triet/.config/google-chrome/Default"
         )
-        options.add_argument(r"--profile-directory=Default")
+        # options.add_argument(r"--profile-directory=Default")
+        options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
         self.driver = selenium.webdriver.Chrome(
             service=Service(ChromeDriverManager().install()), options=options
         )
